@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "rootDir": "./",
+    "outDir": "./dist",
+    "strict": true,
+    "lib": ["esnext", "DOM"],
+    "esModuleInterop": true,
+    "types": ["node"],
+    "typeRoots": ["@types", "./node_modules/@types"],
+    "resolveJsonModule": true
+  },
+  "exclude": ["**/*.spec.ts"]
+}
