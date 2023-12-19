@@ -49,8 +49,8 @@ async function address_get({ params }: Request<AddressGetParams>, res: Response,
       log.error(`Error in address get: by addressId ${params.addressId} not found rows`);
 
       throw {
-        errCode: 404,
-        errMsg: `Error in address get: by addressId ${params.addressId} not found rows`,
+        status: 404,
+        message: `Error in address get: by addressId ${params.addressId} not found rows`,
       };
     }
 
