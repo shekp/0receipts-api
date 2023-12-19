@@ -14,8 +14,8 @@ export const routes = (app: express.Application) => {
   router.post('/user/password', auth, user_password);
   router.patch('/user/:id?', auth, user_patch);
 
-  router.post('/address', address_post);
-  router.get('/address/:addressId', address_get);
+  router.post('/address', auth, address_post);
+  router.get('/address/:addressId', auth, address_get);
 
   app.use(api, router);
 };
