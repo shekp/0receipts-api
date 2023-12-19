@@ -2,15 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { PoolClient } from 'pg';
 import log from '../config/logger';
 import pool from '../loaders/database';
-import { insert_address, select_addresses } from '../db_apis/address.db';
-
-interface AddressPostBody {
-  cityCode: string;
-  streetName: string;
-  buildingNo: string;
-  officeNo: string;
-  zipCode: string;
-}
+import { address_get_db, address_post_db } from '../db_apis/address.db';
+import { AddressGetParams, AddressPostBody } from '../interfaces/address.interface';
 
 async function address_post({ body }: Request<any, any, AddressPostBody>, res: Response, next: NextFunction) {
   let conn!: PoolClient;
@@ -18,10 +11,15 @@ async function address_post({ body }: Request<any, any, AddressPostBody>, res: R
   try {
     conn = await pool.connect();
 
-    const addressInsertResultId = await insert_address(conn, body);
-    const [createdAddress] = await select_addresses(conn, { id: addressInsertResultId.toString() });
+    const addressInsertResultId = await address_post_db(conn, body);
+    const [createdAddress] = await address_get_db(conn, { id: addressInsertResultId });
 
-    return res.status(200).send(createdAddress);
+    res.locals.data = {
+      statusCode: 201,
+      data: createdAddress,
+    };
+
+    next();
   } catch (error: any) {
     log.error(`Error in address_post: ${JSON.stringify(error.message ? error.message : error)}`);
 
@@ -39,33 +37,31 @@ async function address_post({ body }: Request<any, any, AddressPostBody>, res: R
   }
 }
 
-interface AddressGetParams {
-  addressId: string;
-}
-
 async function address_get({ params }: Request<AddressGetParams>, res: Response, next: NextFunction) {
   let conn!: PoolClient;
 
   try {
     conn = await pool.connect();
 
-    const [address] = await select_addresses(conn, { id: params.addressId });
+    const [address] = await address_get_db(conn, { id: Number(params.addressId) });
 
     if (!address) {
       log.error(`Error in address get: by addressId ${params.addressId} not found rows`);
 
-      throw new Error(`Error in address get: by addressId ${params.addressId} not found rows`);
+      throw {
+        status: 404,
+        message: `Error in address get: by addressId ${params.addressId} not found rows`,
+      };
     }
 
-    return res.status(200).send(address);
+    res.locals.data = {
+      statusCode: 200,
+      data: address,
+    };
+
+    next();
   } catch (error: any) {
     log.error(`Error in address_get: ${JSON.stringify(error.message ? error.message : error)}`);
-
-    if (conn) {
-      await conn.query('ROLLBACK').catch((error) => {
-        log.error(`Error rollback in address_get: ${JSON.stringify(error.message ? error.message : error)}`);
-      });
-    }
 
     next(error);
   } finally {

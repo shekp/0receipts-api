@@ -1,35 +1,8 @@
 import { PoolClient } from 'pg';
 import log from '../config/logger';
+import { AddressDBModel, AddressSelectBind, InsertAddressBind } from '../interfaces/address.interface';
 
-interface InsertAddressBind {
-  cityCode: string;
-  streetName: string;
-  buildingNo: string;
-  officeNo: string;
-  zipCode: string;
-}
-
-interface AddressDBModel extends InsertAddressBind {
-  id: number;
-  createUser: string;
-  updateUser: string;
-  createDate: Date;
-  updateDate: Date;
-  cityName: string;
-  stateName: string;
-  countryName: string;
-}
-
-interface AddressSelectBind {
-  id?: string;
-  cityCode?: string;
-  streetName?: string;
-  buildingNo?: string;
-  officeNo?: string;
-  zipCode?: string;
-}
-
-async function insert_address(conn: PoolClient, bind: InsertAddressBind): Promise<number> {
+async function address_post_db(conn: PoolClient, bind: InsertAddressBind): Promise<number> {
   try {
     const binds = [];
     const query = `
@@ -60,7 +33,7 @@ async function insert_address(conn: PoolClient, bind: InsertAddressBind): Promis
   }
 }
 
-async function select_addresses(conn: PoolClient, bind: AddressSelectBind): Promise<AddressDBModel[]> {
+async function address_get_db(conn: PoolClient, bind: AddressSelectBind): Promise<AddressDBModel[]> {
   try {
     const binds = [];
     const sql = `
@@ -112,8 +85,6 @@ async function select_addresses(conn: PoolClient, bind: AddressSelectBind): Prom
 
     const whereString = where.map((whr, i) => (i === 0 ? `where ${whr}` : ` and ${whr}`)).join(' ');
 
-    console.log(whereString);
-
     const { rows } = await conn.query<AddressDBModel>(`${sql} ${whereString}`, binds);
 
     return rows;
@@ -124,4 +95,4 @@ async function select_addresses(conn: PoolClient, bind: AddressSelectBind): Prom
   }
 }
 
-export { insert_address, select_addresses };
+export { address_post_db, address_get_db };
