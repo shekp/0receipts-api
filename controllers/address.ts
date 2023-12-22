@@ -37,7 +37,7 @@ async function address_post({ body }: Request<any, any, AddressPostBody>, res: R
   }
 }
 
-async function address_get({ params }: Request<AddressGetParams>, res: Response, next: NextFunction) {
+async function address_get({ params }: Request<any, AddressGetParams>, res: Response, next: NextFunction) {
   let conn!: PoolClient;
 
   try {

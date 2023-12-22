@@ -1,9 +1,15 @@
+interface User {
+  authUserId: number;
+  authUsername: string;
+}
+
 interface InsertAddressBind {
   cityCode: string;
   streetName: string;
   buildingNo: string;
   officeNo: string;
   zipCode: string;
+  userData: User;
 }
 
 interface AddressDBModel extends InsertAddressBind {
@@ -36,6 +42,7 @@ interface AddressPostBody {
   buildingNo: string;
   officeNo: string;
   zipCode: string;
+  userData: User;
 }
 
 export { InsertAddressBind, AddressDBModel, AddressSelectBind, AddressGetParams, AddressPostBody };

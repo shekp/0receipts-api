@@ -11,13 +11,21 @@ async function address_post_db(conn: PoolClient, bind: InsertAddressBind): Promi
           street_name,
           building_no,
           office_no,
-          zip_code
+          zip_code,
+          create_user,
+          update_user,
+          create_date,
+          update_date
       ) values (
           $${binds.push(bind.cityCode)},
           $${binds.push(bind.streetName)},
           $${binds.push(bind.buildingNo)},
           $${binds.push(bind.officeNo)},
-          $${binds.push(bind.zipCode)}
+          $${binds.push(bind.zipCode)},
+          $${binds.push(bind.userData.authUsername?.toUpperCase())},
+          $${binds.push(bind.userData.authUsername?.toUpperCase())},
+          current_timestamp,
+          current_timestamp
       ) returning id
     `;
 
@@ -39,7 +47,12 @@ async function address_get_db(conn: PoolClient, bind: AddressSelectBind): Promis
     const sql = `
       select
         a.id,
-        a.city_code as "cityCode",
+        a.city_code "cityCode",
+        c.name "cityName",
+        c.state_code "stateCode",
+        s.name as "stateName",
+        s.country_code as "countryCode",
+        cn.name as "countryName",
         a.street_name as "streetName",
         a.building_no as "buildingNo",
         a.office_no as "officeNo",
@@ -47,16 +60,13 @@ async function address_get_db(conn: PoolClient, bind: AddressSelectBind): Promis
         a.create_date as "createDate",
         a.update_date as "updateDate",
         a.create_user as "createUser",
-        a.update_user as "updateUser",
-        c.name as "cityName",
-        s.name as "stateName",
-        cn.name as "countryName"
-      from
-        invoice_system.address a,
-        invoice_system.city c,
-        invoice_system.state s,
-        invoice_system.country cn
+        a.update_user as "updateUser"
+      from invoice_system.address a 
+      join invoice_system.city c on a.city_code = c.code
+      join invoice_system.state s on c.state_code = s.code
+      join invoice_system.country cn on s.country_code = cn.code
     `;
+
     let where: string[] = [];
 
     if (bind.id) {
