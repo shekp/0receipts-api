@@ -94,7 +94,7 @@ async function vendor_post(req: any, res: express.Response, next: express.NextFu
 
     if (bind.icons?.length) {
       for (const icon of bind.icons) {
-        await vendor_icon_post_db(conn, { vendorId, ...icon, userData: bind.userData });
+        await vendor_icon_post_db(conn, { vendorId, ...icon });
       }
     }
 

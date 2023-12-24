@@ -22,11 +22,11 @@ async function vendor_post_db(conn: any, bind: any) {
 
 async function vendor_icon_post_db(conn: any, bind: any) {
   try {
-    const arrBind = [bind.vendorId, bind.typeCode, bind.url, bind.userData?.authUsername?.toUpperCase()];
+    const arrBind = [bind.vendorId, bind.typeCode, bind.url];
 
     const query = `
-        insert into invoice_system.vendor_icon(vendor_id, type_code, url, create_date, create_user, update_date, update_user)
-        values ($1, $2, $3, current_timestamp, $4, current_timestamp, $4)
+        insert into invoice_system.vendor_icon(vendor_id, type_code, url)
+        values ($1, $2, $3)
         returning id
     `;
 
