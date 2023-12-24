@@ -14,7 +14,7 @@
     "Postgre"
   ],
   "author": "TechWorks",
-  "license": "ISC",
+  "license": "",
   "dependencies": {
     "activedirectory": "^0.7.2",
     "app-root-path": "^3.0.0",
@@ -38,7 +38,6 @@
     "pg": "^8.6.0",
     "qrcode": "^1.5.3",
     "socket.io": "^4.4.0",
-    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "uuid": "^9.0.0",
     "winston": "^3.3.3",
@@ -65,7 +64,6 @@
     "@types/pg": "^8.6.6",
     "@types/qrcode": "^1.5.5",
     "@types/supertest": "^2.0.11",
-    "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.2",
     "@types/uuid": "^9.0.2",
     "@types/winston": "^2.4.4",

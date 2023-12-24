@@ -5,6 +5,8 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import multer from 'multer';
 
+const swaggerUi = require('swagger-ui-express');
+
 import morganMiddleware from '../config/morgan';
 import { routes } from './router';
 
@@ -24,6 +26,8 @@ app.use(multer({ storage: multer.memoryStorage() }).single('file'));
 routes(app);
 
 const api: string = '/api/v1';
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(require('../swagger.json')));
 
 app.use(api, function (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (res.locals.data && Object.keys(res.locals.data).length) {

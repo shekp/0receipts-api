@@ -22,11 +22,11 @@ async function receipt_post_db(conn: any, bind: any) {
 
 async function receipt_data_post_db(conn: any, bind: any) {
   try {
-    const arrBind = [bind.receiptId, bind.data, bind.fileUrl, bind.qr, bind.dataType, bind.userData?.authUsername?.toUpperCase()];
+    const arrBind = [bind.receiptId, bind.data, bind.fileUrl, bind.qr, bind.dataType];
 
     const query = `
-          insert into invoice_system.receipt_data(receipt_id, data, file_url, qr, type_code, create_date, create_user, update_date, update_user)
-          values ($1, $2, $3, $4, $5, current_timestamp, $6, current_timestamp, $6)
+          insert into invoice_system.receipt_data(receipt_id, data, file_url, qr, type_code)
+          values ($1, $2, $3, $4, $5)
           returning receipt_id
       `;
 

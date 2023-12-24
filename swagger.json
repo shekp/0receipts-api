@@ -1,0 +1,1970 @@
+{
+  "openapi": "3.0.0",
+  "x-stoplight": {
+    "id": "l9e8q40ehg6r2"
+  },
+  "info": {
+    "title": "Receipt API",
+    "version": "1.0",
+    "description": ""
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000/api/v1.0",
+      "description": "dev"
+    }
+  ],
+  "paths": {
+    "/user/{userId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "integer"
+          },
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "Id of an existing user."
+        }
+      ],
+      "get": {
+        "summary": "Get User Info by User ID",
+        "tags": ["User"],
+        "responses": {
+          "200": {
+            "description": "User Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {}
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found"
+          }
+        },
+        "operationId": "get-users-userId",
+        "description": "Retrieve the information of the user with the matching user ID."
+      },
+      "patch": {
+        "summary": "Update User Information",
+        "operationId": "patch-users-userId",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Bad-Request"
+          }
+        },
+        "description": "Update the information of an existing user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "middleName": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "ruy0nqq5h9f4h"
+                    }
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "Update First Name": {
+                  "value": {
+                    "firstName": "Rebecca"
+                  }
+                },
+                "Update Email": {
+                  "value": {
+                    "email": "rebecca@gmail.com"
+                  }
+                },
+                "Update Last Name": {
+                  "value": {
+                    "lastName": "Baker"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Patch user properties to update."
+        },
+        "tags": ["User"],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ]
+      }
+    },
+    "/user": {
+      "post": {
+        "summary": "Create New User",
+        "operationId": "post-user",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Bad-Request"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "description": "Post the necessary fields for the API to create a new user."
+        },
+        "description": "Create a new user.",
+        "tags": ["User"]
+      }
+    },
+    "/user/login": {
+      "post": {
+        "summary": "Login User",
+        "operationId": "post-user-login",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "x-stoplight": {
+                        "id": "9t272blatbh3n"
+                      },
+                      "description": "Access token for auth",
+                      "example": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJpcnNJNmlvYnYzVDlqN0NZZlh5VVBTYTR1R0hBa055V2RUd1pNTFpaM29nIn0.eyJleHAiOjE3MDA5MDEwNzEsImlhdCI6MTcwMDAzNzA3MSwianRpIjoiNTY1Yjc5OTMtNTY1Yy00ZjJhLTkyNjMtMDllYzMwYTllOTM5IiwiaXNzIjoiaHR0cHM6Ly9rZXljbG9hay50ZWxlY29tLmt6L3JlYWxtcy"
+                    },
+                    "refreshToken": {
+                      "type": "string",
+                      "x-stoplight": {
+                        "id": "1d9s9r2epxy3m"
+                      },
+                      "description": "Refresh token, used when access token expire",
+                      "example": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJpcnNJNmlvYnYzVDlqN0NZZlh5VVBTYTR1R0hBa055V2RUd1pNTFpaM29nIn0.eyJleHAiOjE3MDA5MDEwNzEsImlhdCI6MTcwMDAzNzA3MSwianRpIjoiNTY1Yjc5OTMtNTY1Yy00ZjJhLTkyNjMtMDllYzMwYTllOTM5IiwiaXNzIjoiaHR0cHM6Ly9rZXljbG9hay50ZWxlY29tLmt6L3JlYWxtcy"
+                    }
+                  },
+                  "required": ["accessToken", "refreshToken"]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Bad-Request"
+          }
+        },
+        "description": "User login endpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "sc9otsy0gerj4"
+                    },
+                    "description": "Username"
+                  },
+                  "password": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "71anldko7it9d"
+                    },
+                    "description": "Password"
+                  }
+                },
+                "required": ["username", "password"]
+              }
+            }
+          }
+        },
+        "tags": ["User"]
+      }
+    },
+    "/user/password": {
+      "post": {
+        "summary": "Change User Password",
+        "operationId": "post-user-password",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Bad-Request"
+          }
+        },
+        "description": "Change User Password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "m0pcvmfmjjwpl"
+                    },
+                    "description": "Username"
+                  },
+                  "oldPassword": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "5v361f3hnojwi"
+                    },
+                    "description": "Old password, for matching"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "nz1fwibdv7q2z"
+                    },
+                    "description": "New password"
+                  }
+                },
+                "required": ["username", "oldPassword", "newPassword"]
+              }
+            }
+          }
+        },
+        "tags": ["User"],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ]
+      }
+    },
+    "/user/logout": {
+      "post": {
+        "summary": "Logout User",
+        "operationId": "post-user-logout",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Bad-Request"
+          }
+        },
+        "tags": ["User"],
+        "description": "Logout User",
+        "requestBody": {
+          "content": {}
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJpcnNJNmlvYnYzVDlqN0NZZlh5VVBTYTR1R0hBa055V2RUd1pNTFpaM29nIn0.eyJleHAiOjE3MDA5MDEwNzEsImlhdCI6MTcwMDAzNzA3MSwianRpIjoiNTY1Yjc5OTMtNTY1Yy00ZjJhLTkyNjMtMDllYzMwYTllOTM5IiwiaXNzIjoiaHR0cHM6Ly9rZXljbG9hay50ZWxlY29tLmt6L3JlYWxtcy"
+          }
+        ]
+      }
+    },
+    "/address": {
+      "post": {
+        "summary": "Create Address",
+        "operationId": "post-address",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Address"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Bad-Request"
+          }
+        },
+        "description": "Create Address",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Address"
+              }
+            }
+          }
+        },
+        "tags": ["Address"],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ]
+      }
+    },
+    "/address/{addressId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "addressId",
+          "in": "path",
+          "required": true,
+          "description": "Address ID"
+        }
+      ],
+      "get": {
+        "summary": "Get Address Info by Address ID",
+        "tags": ["Address"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Address"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-address-addressId",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ]
+      }
+    },
+    "/vendor/{vendorId}": {
+      "get": {
+        "summary": "Get Vendor by ID",
+        "tags": ["Vendor"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vendor"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-vendor",
+        "description": "Get Vendor by ID",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "vendorId",
+          "in": "path",
+          "required": true,
+          "description": "Vendor ID"
+        }
+      ]
+    },
+    "/vendor": {
+      "post": {
+        "summary": "Create New Vendor",
+        "operationId": "post-vendor",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Vendor_POST"
+              }
+            }
+          }
+        },
+        "tags": ["Vendor"]
+      }
+    },
+    "/vendor/{vendorId}/branch": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "vendorId",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Get All Vendor Branches",
+        "tags": ["Vendor"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Branch",
+                    "x-stoplight": {
+                      "id": "1dh29gevg8731"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-vendor-vendorId-branch",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create New Branch For Vendor",
+        "operationId": "post-vendor-vendorId-branch",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branch"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Branch"
+              }
+            }
+          }
+        },
+        "tags": ["Vendor"],
+        "description": ""
+      }
+    },
+    "/vendor/{vendorId}/contact": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "vendorId",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Get All Contacts for Vendor",
+        "tags": ["Vendor"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Contact",
+                    "x-stoplight": {
+                      "id": "nuspxtmyunmu2"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-vendor-vendorId-contact",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create New Contact for Vendor",
+        "operationId": "post-vendor-vendorId-contact",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                }
+              }
+            }
+          }
+        },
+        "description": "",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Contact"
+              }
+            }
+          }
+        },
+        "tags": ["Vendor"]
+      }
+    },
+    "/receipt": {
+      "post": {
+        "summary": "Create Receipt",
+        "operationId": "post-receipt",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Receipt"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Bad-Request"
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Receipt"
+              }
+            }
+          }
+        },
+        "tags": ["Receipt"]
+      },
+      "get": {
+        "summary": "Get Receipt By Param",
+        "operationId": "get-receipt",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Receipt",
+                    "x-stoplight": {
+                      "id": "0heen93ebxlaf"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "234"
+            },
+            "in": "query",
+            "name": "userId",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "10"
+            },
+            "in": "query",
+            "name": "limit",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "0"
+            },
+            "in": "query",
+            "name": "offset",
+            "required": true
+          }
+        ],
+        "tags": ["Receipt"],
+        "description": ""
+      },
+      "parameters": []
+    },
+    "/receipt-qr": {
+      "post": {
+        "summary": "Create Receipt (QR)",
+        "operationId": "post-receipt-qr",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "imange/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary",
+                  "description": "Return QR Code for Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Bad-Request"
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Receipt"
+              }
+            }
+          }
+        },
+        "tags": ["Receipt"],
+        "description": "Create Receipt (QR)"
+      },
+      "parameters": []
+    },
+    "/receipt/{receiptId}/data": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "receiptId",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Get Receipt Data",
+        "tags": ["Receipt"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "x-stoplight": {
+                        "id": "bhbuco70faxjb"
+                      }
+                    },
+                    "fileUrl": {
+                      "type": "string",
+                      "x-stoplight": {
+                        "id": "ese0bzxmae23q"
+                      }
+                    },
+                    "typeCode": {
+                      "type": "string",
+                      "x-stoplight": {
+                        "id": "7ra0z4ioxnfcu"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-user-userId-receipt",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ]
+      }
+    },
+    "/receipt/{receiptId}/add-info": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "receiptId",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Get Receipt Add Info",
+        "tags": ["Receipt"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "x-stoplight": {
+                      "id": "14pjwjr70wr8x"
+                    },
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "type": "string",
+                        "x-stoplight": {
+                          "id": "x62cb2zxiuqb9"
+                        }
+                      },
+                      "value": {
+                        "type": "string",
+                        "x-stoplight": {
+                          "id": "7szibmhek6tes"
+                        }
+                      },
+                      "createDate": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                      },
+                      "updateDate": {
+                        "type": "string",
+                        "x-stoplight": {
+                          "id": "i0cfea6d2wj76"
+                        },
+                        "format": "date-time",
+                        "readOnly": true
+                      },
+                      "createUser": {
+                        "type": "string",
+                        "x-stoplight": {
+                          "id": "u3pr0oxxf4ee9"
+                        },
+                        "readOnly": true
+                      },
+                      "updateUser": {
+                        "type": "string",
+                        "x-stoplight": {
+                          "id": "tyi6bw0whjnqv"
+                        },
+                        "readOnly": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-receipt-add-info",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create Add Info for Receipt",
+        "operationId": "post-receipt-receiptId-add-info",
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Success"
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "p7do8bu3s5ksg"
+                    }
+                  },
+                  "value": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "pjunlg28prcpw"
+                    }
+                  }
+                },
+                "required": ["key", "value"]
+              }
+            }
+          }
+        },
+        "tags": ["Receipt"]
+      }
+    },
+    "/receipt-full-info/{receiptId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "receiptId",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Get Full Information About Receipt",
+        "tags": ["Receipt"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Receipt_Full"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-receipt-detail-receiptId",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer Token"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "title": "User",
+        "type": "object",
+        "x-examples": {},
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the given user.",
+            "readOnly": true
+          },
+          "username": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "sb7zn5l9qvw9b"
+            },
+            "description": "Username",
+            "example": "johndoe"
+          },
+          "password": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "9hsibguqpb4m0"
+            },
+            "example": "hash",
+            "writeOnly": true
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "middleName": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "u04pdat66suyh"
+            }
+          },
+          "gender": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "2038un7clvxuf"
+            },
+            "enum": ["male", "female"],
+            "example": "male"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "john.doe@supercompany.com"
+          },
+          "titleId": {
+            "type": "integer",
+            "example": 2,
+            "description": "Title Id(ref to user_title)"
+          },
+          "titleName": {
+            "type": "string",
+            "example": "Manager",
+            "description": "Title Name(ref to user_title)",
+            "readOnly": true
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date that the user was created.",
+            "readOnly": true
+          },
+          "updateDate": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "7amkims9mqkv7"
+            },
+            "format": "date-time",
+            "readOnly": true
+          },
+          "createUser": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "weze0rm4xtpgc"
+            },
+            "readOnly": true
+          },
+          "updateUser": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "vq74jdnw8cf17"
+            },
+            "readOnly": true
+          }
+        },
+        "required": ["id", "username", "password", "firstName", "lastName", "gender", "email", "titleId"]
+      },
+      "Vendor": {
+        "title": "Vendor",
+        "x-stoplight": {
+          "id": "k01iv1yqf0eoj"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 213
+          },
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "8b836d5gvgil2"
+            },
+            "example": "Super Company"
+          },
+          "addressId": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "h5htk4bejhkmv"
+            },
+            "example": "3423",
+            "description": "Previously created address. If not address, use -1 ",
+            "writeOnly": true
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address_RO"
+          },
+          "branches": {
+            "type": "array",
+            "x-stoplight": {
+              "id": "z58wjgkscb56a"
+            },
+            "items": {
+              "$ref": "#/components/schemas/Branch_Vendor_RO"
+            }
+          },
+          "contacts": {
+            "type": "array",
+            "x-stoplight": {
+              "id": "wtls24052ppg2"
+            },
+            "items": {
+              "$ref": "#/components/schemas/Contact",
+              "x-stoplight": {
+                "id": "qvz878km83var"
+              }
+            }
+          },
+          "icons": {
+            "x-stoplight": {
+              "id": "8zqo7yh4drx3n"
+            },
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vendor-icon",
+              "x-stoplight": {
+                "id": "40lxhhnjumuyw"
+              }
+            }
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updateDate": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "a8w01v7nw7on2"
+            },
+            "format": "date-time",
+            "readOnly": true
+          },
+          "createUser": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "i87vspktismuu"
+            },
+            "readOnly": true
+          },
+          "updateUser": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "zdycdwm8i1zbp"
+            },
+            "readOnly": true
+          }
+        },
+        "required": ["name", "addressId"]
+      },
+      "Vendor_POST": {
+        "title": "Vendor",
+        "x-stoplight": {
+          "id": "8h116gnrf6laa"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 213
+          },
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "8b836d5gvgil2"
+            },
+            "example": "Super Company"
+          },
+          "addressId": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "h5htk4bejhkmv"
+            },
+            "example": "3423",
+            "description": "Previously created address. If not address, use -1 ",
+            "writeOnly": true
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address_RO"
+          },
+          "branches": {
+            "type": "array",
+            "x-stoplight": {
+              "id": "z58wjgkscb56a"
+            },
+            "items": {
+              "$ref": "#/components/schemas/Branch"
+            }
+          },
+          "contacts": {
+            "type": "array",
+            "x-stoplight": {
+              "id": "wtls24052ppg2"
+            },
+            "items": {
+              "$ref": "#/components/schemas/Contact"
+            }
+          },
+          "icons": {
+            "x-stoplight": {
+              "id": "8zqo7yh4drx3n"
+            },
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vendor-icon"
+            }
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updateDate": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "a8w01v7nw7on2"
+            },
+            "format": "date-time",
+            "readOnly": true
+          },
+          "createUser": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "i87vspktismuu"
+            },
+            "readOnly": true
+          },
+          "updateUser": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "zdycdwm8i1zbp"
+            },
+            "readOnly": true
+          }
+        },
+        "required": ["name", "addressId"]
+      },
+      "Vendor_RO": {
+        "title": "Vendor",
+        "x-stoplight": {
+          "id": "db7phydshb5nd"
+        },
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "8b836d5gvgil2"
+            },
+            "example": "Super Company"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address_RO"
+          },
+          "icons": {
+            "x-stoplight": {
+              "id": "8zqo7yh4drx3n"
+            },
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vendor-icon",
+              "x-stoplight": {
+                "id": "40lxhhnjumuyw"
+              }
+            }
+          }
+        },
+        "required": ["name"],
+        "readOnly": true
+      },
+      "Address": {
+        "title": "Address",
+        "x-stoplight": {
+          "id": "48wl92wvlepua"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 23412,
+            "readOnly": true
+          },
+          "cityCode": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "rhqvbvatrzpqg"
+            },
+            "description": "City Code",
+            "example": "SYD"
+          },
+          "cityName": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "257z5ok8yflui"
+            },
+            "example": "Sydney",
+            "description": "City Name",
+            "readOnly": true
+          },
+          "stateCode": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "o4rok0ljk71uw"
+            },
+            "example": "SYDSTATE",
+            "description": "State",
+            "readOnly": true
+          },
+          "stateName": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "b1hzgsdwt41jj"
+            },
+            "description": "State Name",
+            "example": "Sydney State",
+            "readOnly": true
+          },
+          "countryCode": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "0to8rjmj0qbjj"
+            },
+            "example": "AUST",
+            "description": "Country Code",
+            "readOnly": true
+          },
+          "countryName": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "yib2f21rs0urq"
+            },
+            "example": "Australia",
+            "description": "Country Name",
+            "readOnly": true
+          },
+          "streetName": {
+            "type": "string",
+            "example": "Oxford Street",
+            "description": "Street Name"
+          },
+          "buildingNo": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "oxaxmmi8b5w5s"
+            },
+            "description": "Building Number"
+          },
+          "officeNo": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "jmkptivsmyxgh"
+            },
+            "description": "Office Number"
+          },
+          "zipCode": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "5qaitxkedikjd"
+            },
+            "description": "ZIP Code",
+            "example": "2000"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updateDate": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "euutu3dmjbt32"
+            },
+            "format": "date-time",
+            "readOnly": true
+          },
+          "createUser": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "6zj4o3prp0bg6"
+            },
+            "readOnly": true
+          },
+          "updateUser": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "1847tuqdhji08"
+            },
+            "readOnly": true
+          }
+        },
+        "required": ["cityCode", "cityName", "stateCode", "stateName", "countryCode", "countryName", "streetName", "buildingNo", "zipCode"]
+      },
+      "Address_RO": {
+        "title": "Address",
+        "x-stoplight": {
+          "id": "yohsof5mifb4b"
+        },
+        "type": "object",
+        "properties": {
+          "cityName": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "257z5ok8yflui"
+            },
+            "example": "Sydney",
+            "description": "City Name",
+            "readOnly": true
+          },
+          "stateName": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "b1hzgsdwt41jj"
+            },
+            "description": "State Name",
+            "example": "Sydney State",
+            "readOnly": true
+          },
+          "countryName": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "yib2f21rs0urq"
+            },
+            "example": "Australia",
+            "description": "Country Name",
+            "readOnly": true
+          },
+          "streetName": {
+            "type": "string",
+            "example": "Oxford Street",
+            "description": "Street Name"
+          },
+          "buildingNo": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "oxaxmmi8b5w5s"
+            },
+            "description": "Building Number"
+          },
+          "officeNo": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "jmkptivsmyxgh"
+            },
+            "description": "Office Number"
+          },
+          "zipCode": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "5qaitxkedikjd"
+            },
+            "description": "ZIP Code",
+            "example": "2000"
+          }
+        },
+        "readOnly": true,
+        "required": ["cityCode", "cityName", "stateCode", "stateName", "countryCode", "countryName", "streetName", "buildingNo", "zipCode"]
+      },
+      "Branch": {
+        "title": "Branch",
+        "x-stoplight": {
+          "id": "1ykhz8wjgyvy8"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 213,
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "8b836d5gvgil2"
+            },
+            "example": "Super Company"
+          },
+          "addressId": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "h5htk4bejhkmv"
+            },
+            "example": "3423",
+            "description": "Previously created address. If not address, use -1 ",
+            "writeOnly": true
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address_RO"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updateDate": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "vd31guxotqdwh"
+            },
+            "format": "date-time",
+            "readOnly": true
+          },
+          "createUser": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "msybobzzptnu3"
+            },
+            "readOnly": true
+          },
+          "updateUser": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "erh76hfu4twls"
+            },
+            "readOnly": true
+          }
+        },
+        "required": ["name", "addressId"]
+      },
+      "Branch_Vendor_RO": {
+        "title": "Branch_Vendor_RO",
+        "x-stoplight": {
+          "id": "6k3ao5fir5apk"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 213,
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "8b836d5gvgil2"
+            },
+            "example": "Super Company"
+          }
+        },
+        "required": ["name"]
+      },
+      "Branch_RO": {
+        "title": "Branch",
+        "x-stoplight": {
+          "id": "x203f7tcd7oaq"
+        },
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "8b836d5gvgil2"
+            },
+            "example": "Super Company"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address_RO"
+          }
+        },
+        "readOnly": true,
+        "required": ["name", "addressId"]
+      },
+      "Contact": {
+        "title": "Contact",
+        "x-stoplight": {
+          "id": "wmsl1hxl902nj"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 213,
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "8b836d5gvgil2"
+            },
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "dwh5e13t9syre"
+            },
+            "example": "john@info.com"
+          },
+          "phone": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "dwh5e13t9syre"
+            },
+            "example": "+77019152334"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updateDate": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "vd31guxotqdwh"
+            },
+            "format": "date-time",
+            "readOnly": true
+          },
+          "createUser": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "msybobzzptnu3"
+            },
+            "readOnly": true
+          },
+          "updateUser": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "erh76hfu4twls"
+            },
+            "readOnly": true
+          }
+        },
+        "required": ["name", "email", "phone"]
+      },
+      "Vendor-icon": {
+        "title": "Vendor Icon",
+        "x-stoplight": {
+          "id": "2xfahayfjbimv"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 213,
+            "readOnly": true
+          },
+          "typeCode": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "8b836d5gvgil2"
+            },
+            "example": "small"
+          },
+          "url": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "dwh5e13t9syre"
+            },
+            "example": "http://aws.s3/icon.gif"
+          }
+        },
+        "required": ["typeCode", "url"]
+      },
+      "Receipt": {
+        "title": "Receipt",
+        "x-stoplight": {
+          "id": "6ob9yjbbikhc8"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 22321456,
+            "readOnly": true
+          },
+          "userId": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "wccfhja4zzvs5"
+            },
+            "example": 123
+          },
+          "branchId": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "7glxvb27whazp"
+            },
+            "example": 321
+          },
+          "typeId": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "576vtcqdv2hbb"
+            },
+            "example": 1
+          },
+          "receiptNo": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "12kbzschpxt5t"
+            },
+            "example": "AA-32345"
+          },
+          "data": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "zr23p8jchne7w"
+            },
+            "description": "reciept data content",
+            "writeOnly": true
+          },
+          "dataType": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "wdfvzihelb0aj"
+            },
+            "description": "data type JSON, FILE, etc",
+            "writeOnly": true
+          },
+          "branchData": {
+            "$ref": "#/components/schemas/Branch_RO",
+            "x-stoplight": {
+              "id": "wqfqnpiedxmf7"
+            }
+          },
+          "vendorData": {
+            "$ref": "#/components/schemas/Vendor_RO",
+            "x-stoplight": {
+              "id": "m4032w0n2hdli"
+            }
+          }
+        },
+        "required": ["branchId", "typeId", "receiptNo", "data", "dataType"]
+      },
+      "Receipt_Full": {
+        "title": "Receipt",
+        "x-stoplight": {
+          "id": "i3lrfdctiuh14"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 22321456,
+            "readOnly": true
+          },
+          "userId": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "wccfhja4zzvs5"
+            },
+            "example": 123
+          },
+          "branchId": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "7glxvb27whazp"
+            },
+            "example": 321
+          },
+          "typeId": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "576vtcqdv2hbb"
+            },
+            "example": 1
+          },
+          "receiptNo": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "12kbzschpxt5t"
+            },
+            "example": "AA-32345"
+          },
+          "data": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "zr23p8jchne7w"
+            },
+            "description": "reciept data content",
+            "writeOnly": true
+          },
+          "dataType": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "wdfvzihelb0aj"
+            },
+            "description": "data type JSON, FILE, etc",
+            "writeOnly": true
+          },
+          "branchData": {
+            "$ref": "#/components/schemas/Branch_RO"
+          },
+          "vendorData": {
+            "$ref": "#/components/schemas/Vendor_RO"
+          },
+          "receiptData": {
+            "type": "object",
+            "x-stoplight": {
+              "id": "wmrb4gvpfpvc9"
+            },
+            "properties": {
+              "data": {
+                "type": "string",
+                "x-stoplight": {
+                  "id": "2iydrh2f4u191"
+                }
+              },
+              "fileUrl": {
+                "type": "string",
+                "x-stoplight": {
+                  "id": "m0igri9jhby4q"
+                }
+              },
+              "typeCode": {
+                "type": "string",
+                "x-stoplight": {
+                  "id": "j9hnyqvluxus4"
+                }
+              }
+            }
+          },
+          "addInfo": {
+            "type": "array",
+            "x-stoplight": {
+              "id": "khqxjua2rvmrz"
+            },
+            "items": {
+              "properties": {
+                "data": {
+                  "type": "string",
+                  "x-stoplight": {
+                    "id": "lf2d9sw2qgkn3"
+                  }
+                },
+                "fileUrl": {
+                  "type": "string",
+                  "x-stoplight": {
+                    "id": "a3hw70ykdjsiz"
+                  }
+                },
+                "typeCode": {
+                  "type": "string",
+                  "x-stoplight": {
+                    "id": "npu9fv85593o1"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": ["branchId", "typeId", "receiptNo", "data", "dataType"]
+      }
+    },
+    "responses": {
+      "Success": {
+        "description": "Example response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errCode": {
+                  "type": "string",
+                  "x-stoplight": {
+                    "id": "mi4u107y3hjmv"
+                  },
+                  "description": "errCode (if success = 0)"
+                },
+                "data": {
+                  "type": "object",
+                  "x-stoplight": {
+                    "id": "xc76f7hlpctmt"
+                  },
+                  "required": ["id"],
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "x-stoplight": {
+                        "id": "1t3xi6zo0gi09"
+                      },
+                      "description": "Created record ID"
+                    }
+                  }
+                }
+              },
+              "required": ["errCode", "data"]
+            }
+          }
+        }
+      },
+      "Bad-Request": {
+        "description": "Example response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errCode": {
+                  "type": "string",
+                  "x-stoplight": {
+                    "id": "n48je95wn661n"
+                  },
+                  "description": "errCode (if success = 0)"
+                },
+                "errMsg": {
+                  "type": "string",
+                  "x-stoplight": {
+                    "id": "zz1nr7hxn7o1g"
+                  },
+                  "description": "Error Message"
+                }
+              },
+              "required": ["errCode", "errMsg"]
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Address"
+    },
+    {
+      "name": "Receipt"
+    },
+    {
+      "name": "User"
+    },
+    {
+      "name": "Vendor"
+    }
+  ]
+}
