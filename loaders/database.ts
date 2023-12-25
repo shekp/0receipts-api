@@ -11,4 +11,7 @@ export default new Pool({
   max: 5,
   connectionString: process.env.DB_STRING,
   idleTimeoutMillis: 30000,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
