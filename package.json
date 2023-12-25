@@ -7,7 +7,7 @@
     "start:dev": "ts-node --files app.ts",
     "dev": "npx nodemon --files app.ts",
     "start": "node ./dist/app.js",
-    "build": "tsc && npx tsc-alias"
+    "build": "tsc && npx tsc-alias && cp ./swagger.json dist/"
   },
   "keywords": [
     "Express",
@@ -59,7 +59,7 @@
     "@types/morgan": "^1.9.2",
     "@types/multer": "^1.4.6",
     "@types/nconf": "^0.10.0",
-    "@types/node": "^15.14.9",
+    "@types/node": "^20.10.5",
     "@types/node-pg-migrate": "^2.3.1",
     "@types/pg": "^8.6.6",
     "@types/qrcode": "^1.5.5",
