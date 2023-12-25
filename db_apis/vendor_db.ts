@@ -86,11 +86,7 @@ async function vendor_icon_get_db(conn: any, bind: any): Promise<any> {
     const select: string = `
       select vi.id,
               vi.type_code "typeCode",
-              vi.url,
-              vi.create_date "createDate",
-              vi.update_date "updateDate",
-              vi.create_user "createUser",
-              vi.update_user "updateUser"
+              vi.url
       from invoice_system.vendor_icon vi
       ${sql_where_clause}
     `;
