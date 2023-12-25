@@ -4,8 +4,6 @@ const Minio = require('minio');
 
 const minioClient = new Minio.Client({
   endPoint: process.env.MINIO_URL,
-  port: Number(process.env.MINIO_PORT),
-  useSSL: false,
   accessKey: process.env.MINIO_ACCESS_KEY,
   secretKey: process.env.MINIO_SECRET_KEY,
 });
@@ -53,10 +51,13 @@ async function receipt_post(req: any, res: express.Response, next: express.NextF
     const receiptId = await receipt_post_db(conn, { ...bind, vendorId: branchData.vendorId });
 
     if (bind.data && bind.dataType === 'FILE') {
+      if (!bind.fileName) {
+        throw { status: 400, message: `Bad request! "fileName" must be provided` };
+      }
       const myBuffer = Buffer.from(bind.data, 'base64');
-      await minioClient.putObject('receipt', 'test', myBuffer, { receiptId });
+      await minioClient.putObject('0receipts', bind.fileName, myBuffer, { receiptId });
       delete bind.data;
-      bind.fileUrl = `${process.env.API_URL}/api/v1/getFileObject/test`;
+      bind.fileUrl = `${process.env.API_URL}/api/v1/getFileObject/${bind.fileName}`;
     }
 
     await receipt_data_post_db(conn, { receiptId, ...bind });
@@ -156,10 +157,13 @@ async function receipt_qr_post(req: any, res: express.Response, next: express.Ne
     const receiptId = await receipt_post_db(conn, { ...bind, vendorId: branchData.vendorId });
 
     if (bind.data && bind.dataType === 'FILE') {
+      if (!bind.fileName) {
+        throw { status: 400, message: `Bad request! "fileName" must be provided` };
+      }
       const myBuffer = Buffer.from(bind.data, 'base64');
-      await minioClient.putObject('receipt', 'test', myBuffer, { receiptId });
+      await minioClient.putObject('0receipts', bind.fileName, myBuffer, { receiptId });
       delete bind.data;
-      bind.fileUrl = `${process.env.API_URL}/api/v1/getFileObject/test`;
+      bind.fileUrl = `${process.env.API_URL}/api/v1/getFileObject/${bind.fileName}`;
     }
 
     const qr = await qrcode.toDataURL(`${process.env.API_URL}/api/v1/receipt-full-info/${receiptId}`);
