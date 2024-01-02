@@ -86,6 +86,10 @@ async function user_patch_db(conn: any, bind: any): Promise<number> {
       updStr += ` ${updStr.trim() ? ' , ' : ' '} last_name = $${arrBind.push(bind.lastName)}`;
     }
 
+    if (bind.middleName) {
+      updStr += ` ${updStr.trim() ? ' , ' : ' '} middle_name = $${arrBind.push(bind.middleName)}`;
+    }
+
     updStr += ` ${updStr.trim() ? ' , ' : ' '} update_date = current_timestamp`;
 
     const query = `update invoice_system.user set ${updStr} where id = $${arrBind.push(bind.id)} returning id`;
