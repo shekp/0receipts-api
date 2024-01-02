@@ -113,6 +113,14 @@ async function user_patch(req: any, res: express.Response, next: express.NextFun
       throw { status: 404, message: `User with ID - ${bind.userId} not found` };
     }
 
+    if (!bind.firstName && !bind.lastName && !bind.middleName && !bind.email) {
+      throw { status: 400, message: `Bad request` };
+    }
+
+    if (bind.password || bind.gender || bind.userTitleId) {
+      throw { status: 400, message: `Bad request` };
+    }
+
     const userId = await user_patch_db(conn, { ...bind, id: currentUserData[0].id });
 
     res.locals.data = {
