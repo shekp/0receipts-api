@@ -32,15 +32,11 @@ async function receipt_post(req: any, res: express.Response, next: express.NextF
 
     const bind = { ...req.body };
 
-    if (!bind.branchId || !bind.userId || !bind.typeId) {
+    if (!bind.userId) {
       throw { status: 400, message: 'Bad request' };
     }
 
-    const branchData = await branch_get_db(conn, { id: bind.branchId });
-
-    if (!branchData) {
-      throw { status: 404, message: `Branch with ID - ${bind.branchId} not found` };
-    }
+    const branchData = await branch_get_db(conn, { id: bind.branchId || -1 });
 
     const userData = await user_get_db(conn, { id: bind.userId });
 
@@ -48,7 +44,7 @@ async function receipt_post(req: any, res: express.Response, next: express.NextF
       throw { status: 404, message: `User with ID - ${bind.userId} not found` };
     }
 
-    const receiptId = await receipt_post_db(conn, { ...bind, vendorId: branchData.vendorId });
+    const receiptId = await receipt_post_db(conn, { ...bind, vendorId: branchData?.vendorId || -1 });
 
     if (bind.data && bind.dataType === 'FILE') {
       if (!bind.fileName) {
@@ -138,11 +134,11 @@ async function receipt_qr_post(req: any, res: express.Response, next: express.Ne
 
     const bind = { ...req.body };
 
-    if (!bind.branchId || !bind.userId || !bind.typeId || !bind.data) {
+    if (!bind.userId) {
       throw { status: 400, message: 'Bad request' };
     }
 
-    const branchData = await branch_get_db(conn, { id: bind.branchId });
+    const branchData = await branch_get_db(conn, { id: bind.branchId || -1 });
 
     if (!branchData) {
       throw { status: 404, message: `Branch with ID - ${bind.branchId} not found` };
