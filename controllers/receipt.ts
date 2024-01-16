@@ -32,11 +32,11 @@ async function receipt_post(req: any, res: express.Response, next: express.NextF
 
     const bind = { ...req.body };
 
-    if (!bind.branchId || !bind.userId || !bind.typeId) {
+    if (!bind.userId) {
       throw { status: 400, message: 'Bad request' };
     }
 
-    const branchData = await branch_get_db(conn, { id: bind.branchId });
+    const branchData = await branch_get_db(conn, { id: bind.branchId || -1 });
 
     if (!branchData) {
       throw { status: 404, message: `Branch with ID - ${bind.branchId} not found` };
@@ -138,11 +138,11 @@ async function receipt_qr_post(req: any, res: express.Response, next: express.Ne
 
     const bind = { ...req.body };
 
-    if (!bind.branchId || !bind.userId || !bind.typeId || !bind.data) {
+    if (!bind.userId) {
       throw { status: 400, message: 'Bad request' };
     }
 
-    const branchData = await branch_get_db(conn, { id: bind.branchId });
+    const branchData = await branch_get_db(conn, { id: bind.branchId || -1 });
 
     if (!branchData) {
       throw { status: 404, message: `Branch with ID - ${bind.branchId} not found` };

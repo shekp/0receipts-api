@@ -1,11 +1,18 @@
 async function receipt_post_db(conn: any, bind: any) {
   try {
-    const arrBind = [bind.userId, bind.vendorId, bind.typeId, bind.branchId, bind.receiptNo, bind.userData?.authUsername?.toUpperCase()];
+    const arrBind = [
+      bind.userId,
+      bind.vendorId || -1,
+      bind.typeId || -1,
+      bind.branchId || -1,
+      bind.receiptNo || `AA-${Math.floor(Math.random() * 90000) + 10000}`,
+      bind.userData?.authUsername?.toUpperCase(),
+    ];
 
     const query = `
-        insert into invoice_system.receipt(user_id, vendor_id, receipt_type_id, branch_id, receipt_no, create_date, create_user, update_date, update_user)
-        values ($1, $2, $3, $4, $5, current_timestamp, $6, current_timestamp, $6)
-        returning id
+      insert into invoice_system.receipt(user_id, vendor_id, receipt_type_id, branch_id, receipt_no, create_date, create_user, update_date, update_user)
+      values ($1, $2, $3, $4, $5, current_timestamp, $6, current_timestamp, $6)
+      returning id
     `;
 
     const {
@@ -22,13 +29,13 @@ async function receipt_post_db(conn: any, bind: any) {
 
 async function receipt_data_post_db(conn: any, bind: any) {
   try {
-    const arrBind = [bind.receiptId, bind.data, bind.fileUrl, bind.qr, bind.dataType];
+    const arrBind = [bind.receiptId, bind.data, bind.fileUrl, bind.qr, bind.dataType || 'default'];
 
     const query = `
-          insert into invoice_system.receipt_data(receipt_id, data, file_url, qr, type_code)
-          values ($1, $2, $3, $4, $5)
-          returning receipt_id
-      `;
+      insert into invoice_system.receipt_data(receipt_id, data, file_url, qr, type_code)
+      values ($1, $2, $3, $4, $5)
+      returning receipt_id
+    `;
 
     const {
       rows: {
