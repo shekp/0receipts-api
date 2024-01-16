@@ -38,13 +38,17 @@ async function receipt_post(req: any, res: express.Response, next: express.NextF
 
     const branchData = await branch_get_db(conn, { id: bind.branchId || -1 });
 
+    if (!branchData) {
+      throw { status: 404, message: `Branch with ID - ${bind.branchId} not found` };
+    }
+
     const userData = await user_get_db(conn, { id: bind.userId });
 
     if (!userData.length) {
       throw { status: 404, message: `User with ID - ${bind.userId} not found` };
     }
 
-    const receiptId = await receipt_post_db(conn, { ...bind, vendorId: branchData?.vendorId || -1 });
+    const receiptId = await receipt_post_db(conn, { ...bind, vendorId: branchData.vendorId });
 
     if (bind.data && bind.dataType === 'FILE') {
       if (!bind.fileName) {
